@@ -16,7 +16,6 @@ const steakCooked = new Promise((resolve, reject) => {
             addFood(steak[5], "#steak", () => {
               addFood(steak[6], "#steak", () => {
                 addFood(steak[7], "#steak", () => {
-                  //console.log('Steak cooked');
                   document.getElementById("table").innerHTML +=
                     '<img src="public/images/steak.jpg">';
                   resolve();
@@ -34,7 +33,6 @@ const steakCooked = new Promise((resolve, reject) => {
 // Iteration 2 using `.then()`
 const potatoesCooked = new Promise((resolve, reject) => {
   addFood(mashPotatoes[0], "#mashPotatoes").then(() => {
-    // ... your code here
     addFood(mashPotatoes[1], "#mashPotatoes").then(() => {
       addFood(mashPotatoes[2], "#mashPotatoes").then(() => {
         addFood(mashPotatoes[3], "#mashPotatoes").then(() => {
@@ -52,39 +50,19 @@ const potatoesCooked = new Promise((resolve, reject) => {
   console.error(err);
 });
 
-
 // Iteration 3 using async and await
 
-// const sproutsCooked = new Promise ((resolve, reject) => {
-//   async function makeFood(steps) {
-//     for (let i = 0; i < steps; i++) {
-//       await addFood(brusselSprouts[i], "#brusselSprouts").then((result) => {
-//         document.getElementById('table').innerHTML+='<img src=\"public/images/brusselSprouts.jpg\">';
-//         resolve();
-//         console.log(sproutsCooked);
-//       });
-//     }
-
-//   }
-//   makeFood(9);
-// });
 const sproutsCooked = new Promise((resolve, reject) => {
-  async function makeFood() {
-    await addFood(brusselSprouts[1], "#brusselSprouts");
-    await addFood(brusselSprouts[2], "#brusselSprouts");
-    await addFood(brusselSprouts[3], "#brusselSprouts");
-    await addFood(brusselSprouts[4], "#brusselSprouts");
-    await addFood(brusselSprouts[5], "#brusselSprouts");
-    await addFood(brusselSprouts[6], "#brusselSprouts");
-    await addFood(brusselSprouts[7], "#brusselSprouts");
-    await addFood(brusselSprouts[8], "#brusselSprouts").then((result) => {
-      document.getElementById("table").innerHTML +=
-        '<img src="public/images/brusselSprouts.jpg">';
-      resolve();
-      console.log(sproutsCooked);
-    });
+  async function makeFood(steps, id) {
+    for (let step of steps) {
+      await addFood(step, id);
+    }
+    document.querySelector(
+      "#table"
+    ).innerHTML += `<img src="public/images/brusselSprouts.jpg" />`;
+    resolve();
   }
-  makeFood();
+  makeFood(brusselSprouts, "#brusselSprouts");
 });
 
 
@@ -92,13 +70,15 @@ const sproutsCooked = new Promise((resolve, reject) => {
 // Using promise.all when all dinner items (Steak, Mash Potatoes, and Brussels Sprouts) are all done and added to the table, alert Dinner is served!
 
 Promise.all([steakCooked, potatoesCooked, sproutsCooked]).then((resolve) => {
-  document.querySelector("body").innerHTML += `<button id="btn">Dinner is served!</button>`;
+  document.querySelector(
+    "body"
+  ).innerHTML += `<button id="btn">Dinner is served!</button>`;
   document.getElementById("btn").addEventListener("click", audio);
 });
 
 const dinnerSound = new Audio();
-dinnerSound.src = 'public/media/dinnerIsServed.mp3';
+dinnerSound.src = "public/media/dinnerIsServed.mp3";
 
-function audio () {
+function audio() {
   dinnerSound.play();
 }
